@@ -3,8 +3,9 @@ import { StyleSheet, Text, KeyboardAvoidingView, View, TouchableOpacity, Image }
 import TextInputForm from '../components/TextInputForm'
 import RoundButton from '../components/RoundButton';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import { connect } from 'react-redux';
 
-export default class RegisterAuctionScreen extends React.Component {
+class RegisterAuctionScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: 'Register My Car to Auction',
@@ -19,12 +20,11 @@ export default class RegisterAuctionScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            listingId: 0
         }
     }
     fetchCars() {
         const itemId = this.props.navigation.getParam('itemId');
-        return fetch(`http://192.168.0.76:3000/api/VehicleListing?access_token=yqFoKtAvRrNTT6kOpNNKCb6bd5RBgMPQqrxN9DM98lifSgHiJRa8JmkXGJv569e8`,
+        return fetch(`http://192.168.0.76:3000/api/VehicleListing?access_token=XVwS0F1BeHKmqs1ELv2SLkvsuDcHHy6Ot6OFoH5RT1CDzbDmqVDavpEPODuYANIp`,
             {
                 //이걸 안적으면 그냥 string 형태로 들어가기 때문에 꼭 적어서 json 형태라는 것을 알려줘야함!
                 headers: {
@@ -34,7 +34,7 @@ export default class RegisterAuctionScreen extends React.Component {
                 method: 'POST',
                 body: JSON.stringify({
                     $class: "org.acme.vehicle.auction.VehicleListing",
-                    listingId: this.state.listingId,
+                    listingId: this.props.listingId,
                     reservePrice: this.state.reservePrice,
                     description: this.state.description,
                     state: "FOR_SALE",
@@ -48,9 +48,6 @@ export default class RegisterAuctionScreen extends React.Component {
             });
     }
 
-    componentDidMount() {
-        this.setState({ listingId: this.state.listingId + 1 })
-    }
     render() {
         return (
             <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -61,7 +58,7 @@ export default class RegisterAuctionScreen extends React.Component {
                 <View style={{ height: 20 }} />
                 <View style={{ flexDirection: 'row', paddingRight: 180 }}>
                     <Ionicons name="ios-apps" size={20} color="gray" style={{ paddingRight: 10 }} ></Ionicons>
-                    <Text style={styles.fontL}>listing Id = {this.state.listingId} </Text>
+                    <Text style={styles.fontL}>listing Id = {this.props.listingId} </Text>
                 </View>
                 <View style={{ height: 10 }} />
                 <TextInputForm placeholder="생각하는 최저가" icon={<FontAwesome name="money" size={15} color='gray' ></FontAwesome>}
@@ -75,6 +72,13 @@ export default class RegisterAuctionScreen extends React.Component {
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        listingId: state.listingId
+    }
+}
+export default connect(mapStateToProps)(RegisterAuctionScreen);
 
 const styles = StyleSheet.create({
     container: {

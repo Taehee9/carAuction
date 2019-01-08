@@ -4,8 +4,9 @@ import TextInputForm from '../components/TextInputForm'
 import RoundButton from '../components/RoundButton';
 import { Ionicons } from '@expo/vector-icons';
 import { ImagePicker } from 'expo';
+import { connect } from 'react-redux';
 
-export default class RegisterCarScreen extends React.Component {
+class RegisterCarScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'Register My Car',
@@ -25,7 +26,7 @@ export default class RegisterCarScreen extends React.Component {
     }
   }
   fetchCars() {
-    return fetch(`http://192.168.0.76:3000/api/Vehicle?access_token=yqFoKtAvRrNTT6kOpNNKCb6bd5RBgMPQqrxN9DM98lifSgHiJRa8JmkXGJv569e8`,
+    return fetch(`http://192.168.0.76:3000/api/Vehicle?access_token=XVwS0F1BeHKmqs1ELv2SLkvsuDcHHy6Ot6OFoH5RT1CDzbDmqVDavpEPODuYANIp`,
       {
         //이걸 안적으면 그냥 string 형태로 들어가기 때문에 꼭 적어서 json 형태라는 것을 알려줘야함!
         headers: {
@@ -41,7 +42,7 @@ export default class RegisterCarScreen extends React.Component {
           carYear: this.state.carYear,
           carManufacturer: this.state.carManufacturer,
           carSpecies: this.state.carSpecies,
-          owner: "org.acme.vehicle.auction.Member#th@auction.com"
+          owner: `org.acme.vehicle.auction.Member#${this.props.mem.email}`
         })
       })
       .then(response => response.json())
@@ -84,7 +85,7 @@ export default class RegisterCarScreen extends React.Component {
             justifyContent: 'center', alignItems: 'center'
           }} >
             {image &&
-              <Image source={{ uri: image }} style={{ width: 200, height: 100, resizeMode: 'cover' }} />
+              <Image source={{ uri: image }} style={{ width: 300, height: 150, resizeMode: 'cover' }} />
             }
             <View style={{
               position: 'absolute', left: 280, top: 125, borderWidth: StyleSheet.hairlineWidth, borderColor: 'black',
@@ -104,6 +105,14 @@ export default class RegisterCarScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    mem: state.mem
+  }
+}
+export default connect(mapStateToProps)(RegisterCarScreen);
+
 
 const styles = StyleSheet.create({
   container: {

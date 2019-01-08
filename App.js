@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
 import LoginScreen from './screen/LoginScreen'
 import RegisterCarScreen from './screen/RegisterCarScreen';
@@ -10,6 +9,21 @@ import SettingScreen from './screen/SettingScreen';
 import { Ionicons } from '@expo/vector-icons'
 import MyCarListScreen from './screen/MyCarListScreen';
 import MyCarDetailScreen from './screen/MyCarDetailScreen';
+
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import rootReducer from './reducers';
+
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+let store = createStore(persistedReducer)
+
 
 const App2Navigator = createStackNavigator({
   Home1: {
@@ -76,6 +90,7 @@ const RootStack = createStackNavigator(
   {
     Main: {
       screen: LoginScreen,
+      //screen: MyCarListScreen
     },
     TabNav: {
       screen: TabNavigator
@@ -84,7 +99,7 @@ const RootStack = createStackNavigator(
       screen: RegisterCar
     },
     RegisterAuction: {
-      screen: RegisterAuctionScreen
+      screen: RegisterAuction
     }
   },
   {
@@ -98,6 +113,10 @@ const AppContainer = createAppContainer(RootStack);
 
 export default class App extends React.Component {
   render() {
-    return <AppContainer />;
+    return (
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    )
   }
 }

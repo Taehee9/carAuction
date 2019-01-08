@@ -19,7 +19,7 @@ export default class DetailCarScreen extends React.Component {
   }
   fetchCars() {
     const itemId = this.props.navigation.getParam('itemId');
-    return fetch(`http://192.168.0.76:3000/api/VehicleListing/${itemId}?filter={"include":"resolve"}&access_token=yqFoKtAvRrNTT6kOpNNKCb6bd5RBgMPQqrxN9DM98lifSgHiJRa8JmkXGJv569e8`)
+    return fetch(`http://192.168.0.76:3000/api/VehicleListing/${itemId}?filter={"include":"resolve"}&access_token=XVwS0F1BeHKmqs1ELv2SLkvsuDcHHy6Ot6OFoH5RT1CDzbDmqVDavpEPODuYANIp`)
       .then(response => response.json())
       .catch(error => {
         console.error(error);
